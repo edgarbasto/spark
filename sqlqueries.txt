@@ -1,0 +1,23 @@
+BEGIN;
+--
+-- Create model Analysis
+--
+CREATE TABLE "spark_analysis" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "pub_date" date NOT NULL, "year" smallint unsigned NOT NULL CHECK ("year" >= 0));
+--
+-- Create model Company
+--
+CREATE TABLE "spark_company" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(200) NOT NULL);
+--
+-- Create model Inputs
+--
+CREATE TABLE "spark_inputs" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "price" real NOT NULL, "consumption" real NOT NULL, "month" smallint unsigned NOT NULL CHECK ("month" >= 0), "period" varchar(20) NOT NULL, "analysis_id" integer NOT NULL REFERENCES "spark_analysis" ("id") DEFERRABLE INITIALLY DEFERRED);
+--
+-- Add field company to analysis
+--
+CREATE TABLE "new__spark_analysis" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "pub_date" date NOT NULL, "year" smallint unsigned NOT NULL CHECK ("year" >= 0), "company_id" integer NOT NULL REFERENCES "spark_company" ("id") DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO "new__spark_analysis" ("id", "pub_date", "year", "company_id") SELECT "id", "pub_date", "year", NULL FROM "spark_analysis";
+DROP TABLE "spark_analysis";
+ALTER TABLE "new__spark_analysis" RENAME TO "spark_analysis";
+CREATE INDEX "spark_inputs_analysis_id_822437dd" ON "spark_inputs" ("analysis_id");
+CREATE INDEX "spark_analysis_company_id_0db070b2" ON "spark_analysis" ("company_id");
+COMMIT;

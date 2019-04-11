@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 class Company(models.Model):
     name = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name
 
 class Analysis(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -19,6 +21,9 @@ class Analysis(models.Model):
     year = models.PositiveSmallIntegerField(
         choices = _YEAR
     )
+    def __str__(self):
+        ans = str(self.company) + ' - ' + str(self.year)
+        return ans
 
 class Inputs(models.Model):
     analysis = models.ForeignKey(Analysis, on_delete=models.CASCADE)
@@ -57,19 +62,29 @@ class Inputs(models.Model):
                (October,'October'),
                (November,'November'),
                (December,'December'),
-    )
+            )
 
     month = models.PositiveSmallIntegerField(
         choices = _MONTH
     )
+
     #PERIOD definition
-    _PERIOD = ( (Ponta, 'Ponta'),
-                (Cheia, 'Cheia',
-                (Vazio, 'Vazio'),
-                (SuperVazio, 'SuperVazio'))
-                )
+    Ponta = 'Ponta'
+    Cheia = 'Cheia'
+    Vazio = 'Vazio'
+    SuperVazio = 'SuperVazio'
+    _PERIOD = (
+        (Ponta, 'Ponta'),
+        (Cheia, 'Cheia'),
+        (Vazio, 'Vazio'),
+        (SuperVazio, 'SuperVazio'),
+        )
+
     period = models.CharField(
-        choices=_PERIOD,    
+        max_length=20,
+        choices=_PERIOD    
     )
+    def __str__(self):
+        ans = str(self.analysis) + ' - ' + str(self.month) + ' - ' + str(self.period)
     
     
