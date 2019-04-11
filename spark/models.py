@@ -86,5 +86,6 @@ class Inputs(models.Model):
     )
     def __str__(self):
         ans = str(self.analysis) + ' - ' + str(self.month) + ' - ' + str(self.period)
+        return ans
     
     
