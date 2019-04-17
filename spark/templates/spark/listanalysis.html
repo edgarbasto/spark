@@ -1,2 +1,13 @@
-{{ analysis }}
-{{ company_name }}
+{% for c in company_list %}
+    {{ c }}
+{% endfor %}
+
+{% if analysis_list %}
+    <ul>
+    {% for a in analysis_list %}
+        <li><a href="{{ a.year }}/">{{ a.year }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No analysis for this company.</p>
+{% endif %}

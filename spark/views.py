@@ -18,9 +18,10 @@ def index(request):
     
 
 def listanalysis(request, company_name):
-    company_list = get_list_or_404(Company) 
-    #return render(request, 'spark/index.html', {'company_list':company_list})
-    return HttpResponse('{{ company_name : company_list }} listings')
+    c = Company.objects.get(name=company_name)
+    analysis_list = get_list_or_404(Analysis, company=c.id) 
+    return render(request, 'spark/listanalysis.html', {'analysis_list':analysis_list})
+    #return HttpResponse(' {c.name}')
 
 def detail(request, company_name, analysis_id):
     return HttpResponse('Listing companies')
