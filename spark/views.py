@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse
 from django.template import loader
 from .models import Company, Analysis
+import openpyxl
 
 
 # Create your views here.
@@ -24,4 +25,33 @@ def listanalysis(request, company_name):
     #return HttpResponse(' {c.name}')
 
 def detail(request, company_name, analysis_id):
-    return HttpResponse('Listing companies')
+    return render(request, 'spark/detail.html')
+    #return HttpResponse('Listing details')
+
+'''
+def detail(request, company_name, analysis_id):
+    if "GET" == request.method:
+        return render(request, 'spark/detail.html', {})
+    else:
+        excel_file = request.FILES["excel_file"]
+        # you may put validations here to check extension or file size
+
+        wb = openpyxl.load_workbook(excel_file)
+
+        # getting a particular sheet by name out of many sheets
+        worksheet = wb["base"]
+        print(worksheet)
+
+        excel_data = list()
+        # iterating over the rows and
+        # getting value from each cell in row
+        for row in worksheet.iter_rows():
+            row_data = list()
+            for cell in row:
+                row_data.append(str(cell.value))
+            excel_data.append(row_data)
+
+    return render(request, 'spark/detail.html', {"excel_data":excel_data})
+    #return HttpResponse('Listing companies')
+
+'''
