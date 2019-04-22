@@ -1,0 +1,12 @@
+
+
+{% if analysis_list %}
+    <ul>
+    {% for a in analysis_list %}
+        <li><a href="{{ a.pk }}/">{{ a.pk }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No analysis for this company.</p>
+{% endif %}
+

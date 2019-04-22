@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
-from django.http import HttpResponse
-from django.template import loader
+#from django.shortcuts import render, get_object_or_404, get_list_or_404
+#from django.http import HttpResponse, HttpResponseRedirect
+#from django.template import loader
+from django.views import generic
 from .models import Company, Analysis, Inputs
 import pandas as pd
 import openpyxl
@@ -8,8 +9,34 @@ import openpyxl
 
 # Create your views here.
 
+class IndexView(generic.ListView):
+    template_name = 'spark/index.html'
+    context_object_name = 'company_list'
 
+    def get_queryset(self):
+        return Company.objects.all()
 
+class CompanyDetailView(generic.ListView):
+    template_name= 'spark/companydetail.html'
+    def get_queryset(self, *args, **kwargs):
+        c = Company.objects.get(name=self.kwargs['company_name'])
+        return  Analysis.objects.filter(company= c.id)
+    
+
+class ResultsView(generic.ListView):
+    template_name= 'spark/detail.html' 
+    context_object_name = 'object'
+    def get_queryset(self, *args, **kwargs):
+         c = Company.objects.get(name=self.kwargs['company_name'])
+         a = Analysis.objects.get(pk=self.kwargs['pk'])
+         return Inputs.objects.filter(analysis=a.id)
+    '''
+    model = Inputs
+    template_name= 'spark/detail.html' 
+    
+    '''
+
+'''
 def index(request):
     company_list = Company.objects.all()
     template = loader.get_template('spark/index.html')
@@ -65,3 +92,4 @@ def detail(request, company_name, analysis_id):
         
         return render(request, 'spark/detail.html', context)
 
+'''
