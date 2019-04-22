@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse
 from django.template import loader
-from .models import Company, Analysis, Inputs
-import pandas as pd
+from .models import Company, Analysis
 import openpyxl
 
 
@@ -28,7 +27,6 @@ def listanalysis(request, company_name):
 #def detail(request, company_name, analysis_id):
 #    return render(request, 'spark/detail.html')
     #return HttpResponse('Listing details')
-
 
 
 def detail(request, company_name, analysis_id):
@@ -64,4 +62,3 @@ def detail(request, company_name, analysis_id):
             }
         
         return render(request, 'spark/detail.html', context)
-

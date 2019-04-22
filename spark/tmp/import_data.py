@@ -11,15 +11,24 @@ for row in df.itertuples(index=True, name='Teste'):
     meses = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO']
     periodo = ['Ponta', 'Cheio', 'Vazio', 'Super Vazio']
     try:
-        meses.index(getattr(row, 'Descritivo'))
+        #meses.index(getattr(row, 'Descritivo'))
         mes = meses.index(getattr(row, 'Descritivo')) + 1
-        #print('{} and {}'.format(mes, getattr(row+1, 'Descritivo')))
+        print('Mês: {}'.format(mes))
     except ValueError:
-        False
-         
+        if mes >= 1 and mes <= 12:
+            try:
+                #periodo.index(getattr(row, 'Descritivo'))
+                if (periodo.index(getattr(row, 'Descritivo')) is not None):
+                    print('Para o {} mes, periodo: {}, consumo: {}, preço: {}'.format(mes, getattr(row, 'Descritivo'), getattr(row, 'Consumo'), getattr(row, 'Preco')))
+                    type(getattr(row, 'Consumo'))
+                    type(getattr(row, 'Preco'))
+            except ValueError:
+                print('')
+        #False        
+    #print('Para o {} mes, periodo: {}, consumo: {}, preço: {}'.format(mes, getattr(row, 'Descritivo'), getattr(row, 'Consumo'), getattr(row, 'Preco')))
 
-    print('{} and {}'.format(getattr(row, 'Descritivo'), getattr(row, 'Consumo')))
 
 
+   
 
 df[1]

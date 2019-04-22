@@ -10,3 +10,4 @@ urlpatterns = [
     path('<str:company_name>/<int:analysis_id>/', views.detail, name='detail'),
     
 ]
+
