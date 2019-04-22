@@ -24,14 +24,18 @@ def listanalysis(request, company_name):
     return render(request, 'spark/listanalysis.html', {'analysis_list':analysis_list})
     #return HttpResponse(' {c.name}')
 
-def detail(request, company_name, analysis_id):
-    return render(request, 'spark/detail.html')
+#def detail(request, company_name, analysis_id):
+#    return render(request, 'spark/detail.html')
     #return HttpResponse('Listing details')
 
-'''
+
 def detail(request, company_name, analysis_id):
     if "GET" == request.method:
-        return render(request, 'spark/detail.html', {})
+        context = {
+            'company_name':company_name,
+            'analysis_id':analysis_id
+        }
+        return render(request, 'spark/detail.html', context)
     else:
         excel_file = request.FILES["excel_file"]
         # you may put validations here to check extension or file size
@@ -51,7 +55,10 @@ def detail(request, company_name, analysis_id):
                 row_data.append(str(cell.value))
             excel_data.append(row_data)
 
-    return render(request, 'spark/detail.html', {"excel_data":excel_data})
-    #return HttpResponse('Listing companies')
-
-'''
+        context =  {
+            'company_name':company_name,
+            'analysis_id':analysis_id,
+            "excel_data":excel_data
+            }
+        
+        return render(request, 'spark/detail.html', context)
