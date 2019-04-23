@@ -2,6 +2,7 @@
 #from django.http import HttpResponse, HttpResponseRedirect
 #from django.template import loader
 from django.views import generic
+from django.views.generic.edit import CreateView
 from .models import Company, Analysis, Inputs
 import pandas as pd
 import openpyxl
@@ -21,6 +22,12 @@ class CompanyDetailView(generic.ListView):
     def get_queryset(self, *args, **kwargs):
         c = Company.objects.get(name=self.kwargs['company_name'])
         return  Analysis.objects.filter(company= c.id)
+
+class AnalysisCreate(CreateView):
+    model = Analysis
+    model.company = self.kwargs['company_name']
+    fields = ['year', 'pub_date']
+    #success_url = "/spark/"
     
 
 class ResultsView(generic.ListView):
@@ -36,6 +43,10 @@ class ResultsView(generic.ListView):
     template_name= 'spark/detail.html' 
     
     '''
+
+
+
+
 
 '''
 def index(request):

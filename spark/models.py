@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Company(models.Model):
@@ -24,6 +25,10 @@ class Analysis(models.Model):
     def __str__(self):
         ans = str(self.company) + ' - ' + str(self.year)
         return ans
+    
+    def get_absolute_url(self):
+        return reverse('spark:list', kwargs={'company_name': self.company.name})
+
 
 class Inputs(models.Model):
     analysis = models.ForeignKey(Analysis, on_delete=models.CASCADE)
