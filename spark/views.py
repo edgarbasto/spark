@@ -29,7 +29,8 @@ class ResultsView(generic.ListView):
     def get_queryset(self, *args, **kwargs):
          c = Company.objects.get(name=self.kwargs['company_name'])
          a = Analysis.objects.get(pk=self.kwargs['pk'])
-         return Inputs.objects.filter(analysis=a.id)
+         if a.company.id == c.id:
+             return Inputs.objects.filter(analysis=a.id)
     '''
     model = Inputs
     template_name= 'spark/detail.html' 

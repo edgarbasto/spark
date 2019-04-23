@@ -1,18 +1,22 @@
 
 
-{% if object %}
-<table>
-<tr>
-    <th>Mês</th>
-    <th>Consumo</th>
-    <th>Preço</th>
-</tr>
-{% for i in object %}
-    <td>{{i.month}}</td>
-    <td>{{i.price}}</td>
-    <td>{{i.consumption}}</td>
-{% endfor %}
-</ul>
+{% if object_list %}
+    <table>
+    <tr>
+        <th>Mês</th>
+        <th>Período</th>
+        <th>Consumo</th>
+        <th>Preço</th>
+    </tr>
+    {% for i in object_list %}
+        <tr>
+            <td>{{i.month}}</td>
+            <td>{{i.period}}</td>
+            <td>{{i.price}}</td>
+            <td>{{i.consumption}}</td>
+        </tr>
+    {% endfor %}
+    </ul>
 {% else %}
 <p>No analysis for this company.</p>
 {% endif %}
