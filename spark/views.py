@@ -25,7 +25,7 @@ class CompanyDetailView(generic.ListView):
 
 class AnalysisCreate(CreateView):
     model = Analysis
-    model.company = self.kwargs['company_name']
+    #model.company = self.kwargs['company_name']
     fields = ['year', 'pub_date']
     #success_url = "/spark/"
     
