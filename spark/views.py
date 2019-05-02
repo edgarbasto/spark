@@ -3,6 +3,10 @@
 #from django.template import loader
 from django.views import generic
 from django.views.generic.edit import CreateView
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils import timezone
 from .models import Company, Analysis, Inputs
 import pandas as pd
 import openpyxl
@@ -25,10 +29,23 @@ class CompanyDetailView(generic.ListView):
 
 class AnalysisCreate(CreateView):
     model = Analysis
-    #model.company = self.kwargs['company_name']
-    fields = ['year', 'pub_date']
-    #success_url = "/spark/"
+    fields = ['year']
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.company = Company.objects.get(name=self.kwargs['company_name'])
+        obj.pub_date = timezone.now()
+        obj.save()
+        return HttpResponseRedirect(reverse('spark:list', args=[self.kwargs['company_name']]))
     
+
+class ResultsImport(CreateView):
+    model = Inputs
+    fields = [] 
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        
+        obj.save()
+
 
 class ResultsView(generic.ListView):
     template_name= 'spark/detail.html' 

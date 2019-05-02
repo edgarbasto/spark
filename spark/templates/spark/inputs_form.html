@@ -1,0 +1,10 @@
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="file"
+                   title="Upload excel file"
+                   name="excel_file"
+                   style="border: 1px solid black; padding: 5px;"
+                   required="required">
+    <br>
+    <input type="submit" value="Save">
+</form>
