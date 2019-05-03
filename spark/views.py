@@ -8,8 +8,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 from .models import Company, Analysis, Inputs
-import pandas as pd
-import openpyxl
+from .forms import UploadFileForm
+#import openpyxl
 
 
 # Create your views here.
@@ -43,7 +43,7 @@ class ResultsImport(CreateView):
     fields = [] 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        
+        #excel_file = request.FILES["excel_file"]
         obj.save()
 
 
@@ -61,9 +61,52 @@ class ResultsView(generic.ListView):
     
     '''
 
-
-
-
+'''
+def import_inputs(request, company_name, pk):
+    message=''
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES['excel_file']
+            try:
+                import pandas as pd
+                df = pd.read_excel(excel_file, index_col=None, header=None, dtype={'period':str, 'consumption':int, 'price':float})
+                year = df[1][1]
+                df.columns = ['Descritivo', 'Consumo', 'Preco', 'Total']
+                df.dropna(axis=0, thresh=1, inplace=True)
+                mes=0
+                for row in df.itertuples(index=True, name='Teste'):
+                    meses = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO']
+                    periodo = ['Ponta', 'Cheio', 'Vazio', 'Super Vazio']
+                    try:
+                        #meses.index(getattr(row, 'Descritivo'))
+                        mes = meses.index(getattr(row, 'Descritivo')) + 1
+                        print('Mês: {}'.format(mes))
+                    except ValueError:
+                        if mes >= 1 and mes <= 12:
+                            try:
+                                #periodo.index(getattr(row, 'Descritivo'))
+                                if (periodo.index(getattr(row, 'Descritivo')) is not None):
+                                    obj=Inputs(
+                                        analysis=pk, 
+                                        price=getattr(row, 'Preco').value, 
+                                        consumption=getattr(row, 'Consumo').value, 
+                                        month=mes, period=periodo.index(getattr(row, 'Descritivo')
+                                    )
+                                    #obj.save()
+                                    print('Para o {} mes, periodo: {}, consumo: {}, preço: {}'.format(mes, getattr(row, 'Descritivo'), getattr(row, 'Consumo'), getattr(row, 'Preco')))
+                                    type(getattr(row, 'Consumo'))
+                                    type(getattr(row, 'Preco'))
+                            except ValueError:
+                                print('')
+                        #False        
+                    #print('Para o {} mes, periodo: {}, consumo: {}, preço: {}'.format(mes, getattr(row, 'Descritivo'), getattr(row, 'Consumo'), getattr(row, 'Preco')))
+        else:
+            message='Invalid Entries'
+    else:
+        form= UploadFileForm()
+    return render(request,'spark/import.html', {'form':form,'message':message})
+'''
 
 '''
 def index(request):

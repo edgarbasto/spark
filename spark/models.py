@@ -6,6 +6,9 @@ class Company(models.Model):
     name = models.CharField(max_length=200)
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name_plural = "Companies"
 
 class Analysis(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -28,6 +31,9 @@ class Analysis(models.Model):
     
     def get_absolute_url(self):
         return reverse('spark:list', kwargs={'company_name': self.company.name})
+    
+    class Meta:
+        verbose_name_plural = "Analysis"
 
 
 class Inputs(models.Model):
@@ -92,5 +98,8 @@ class Inputs(models.Model):
     def __str__(self):
         ans = str(self.analysis) + ' - ' + str(self.month) + ' - ' + str(self.period)
         return ans
+    
+    class Meta:
+        verbose_name_plural = "Inputs"
     
     
